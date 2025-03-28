@@ -190,50 +190,96 @@
         <button type="submit" class="submit-btn">Submit Project Request</button>
     </form>
     
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add stakeholder functionality
-            let stakeholderCount = 1;
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add stakeholder functionality
+        let stakeholderCount = 1;
+        
+        document.getElementById('addStakeholderBtn').addEventListener('click', function() {
+            stakeholderCount++;
+            const container = document.getElementById('stakeholdersContainer');
+            const newStakeholder = document.createElement('div');
+            newStakeholder.className = 'stakeholder';
             
-            document.getElementById('addStakeholderBtn').addEventListener('click', function() {
-                stakeholderCount++;
-                const container = document.getElementById('stakeholdersContainer');
-                const newStakeholder = document.createElement('div');
-                newStakeholder.className = 'stakeholder';
+            newStakeholder.innerHTML = `
+                <label for="stakeholderName${stakeholderCount}">Stakeholder Name</label>
+                <input type="text" id="stakeholderName${stakeholderCount}" name="stakeholderName${stakeholderCount}">
                 
-                newStakeholder.innerHTML = `
-                    <label for="stakeholderName${stakeholderCount}">Stakeholder Name</label>
-                    <input type="text" id="stakeholderName${stakeholderCount}" name="stakeholderName${stakeholderCount}">
-                    
-                    <label for="stakeholderEmail${stakeholderCount}">Stakeholder Email</label>
-                    <input type="email" id="stakeholderEmail${stakeholderCount}" name="stakeholderEmail${stakeholderCount}">
-                    
-                    <label for="stakeholderRole${stakeholderCount}">Role in Project</label>
-                    <input type="text" id="stakeholderRole${stakeholderCount}" name="stakeholderRole${stakeholderCount}" placeholder="e.g. Developer, Product Manager, etc.">
-                    
-                    <button type="button" class="remove-stakeholder">Remove</button>
-                `;
+                <label for="stakeholderEmail${stakeholderCount}">Stakeholder Email</label>
+                <input type="email" id="stakeholderEmail${stakeholderCount}" name="stakeholderEmail${stakeholderCount}">
                 
-                container.appendChild(newStakeholder);
-            });
+                <label for="stakeholderRole${stakeholderCount}">Role in Project</label>
+                <input type="text" id="stakeholderRole${stakeholderCount}" name="stakeholderRole${stakeholderCount}" placeholder="e.g. Developer, Product Manager, etc.">
+                
+                <button type="button" class="remove-stakeholder">Remove</button>
+            `;
             
-            // Remove stakeholder functionality
-            document.getElementById('stakeholdersContainer').addEventListener('click', function(e) {
-                if (e.target.classList.contains('remove-stakeholder')) {
-                    const stakeholderDiv = e.target.parentElement;
-                    if (document.querySelectorAll('.stakeholder').length > 1) {
-                        stakeholderDiv.remove();
-                    }
+            container.appendChild(newStakeholder);
+        });
+        
+        // Remove stakeholder functionality
+        document.getElementById('stakeholdersContainer').addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-stakeholder')) {
+                const stakeholderDiv = e.target.parentElement;
+                if (document.querySelectorAll('.stakeholder').length > 1) {
+                    stakeholderDiv.remove();
                 }
+            }
+        });
+        
+        // Form submission
+        document.getElementById('gcpIntakeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect all form data into an object
+            const formData = new FormData(this);
+            const formObject = {};
+            
+            // Convert FormData to a regular object
+            formData.forEach((value, key) => {
+                formObject[key] = value;
             });
             
-            // Form submission
-            document.getElementById('gcpIntakeForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                // In a real implementation, this would send the data to Tines
-                alert('Form submitted successfully! In a real implementation, this data would be sent to Tines for processing.');
+            // Add timestamp
+            formObject.submittedAt = new Date().toISOString();
+            
+            // Show loading state
+            const submitBtn = document.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Submitting...';
+            submitBtn.disabled = true;
+            
+            // Send to Tines webhook
+            fetch('https://dark-sound-3308.tines.com/webhook/6f345e0f42ae7c9df8af3f352891bf7f/6ac1374863869e848c87ded70ad526e5', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formObject)
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Show success message
+                    alert('Project request submitted successfully!');
+                    // Optionally reset the form
+                    document.getElementById('gcpIntakeForm').reset();
+                } else {
+                    // Show error message
+                    alert('There was an error submitting your request. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error submitting your request. Please try again.');
+            })
+            .finally(() => {
+                // Reset button state
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
             });
         });
-    </script>
+    });
+</script>
+    
 </body>
 </html>
