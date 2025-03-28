@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GCP Project Intake Form</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #4285F4;
+            border-bottom: 2px solid #4285F4;
+            padding-bottom: 10px;
+        }
+        .section {
+            margin-bottom: 25px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .section h2 {
+            margin-top: 0;
+            color: #4285F4;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        input[type="text"], 
+        input[type="email"],
+        input[type="tel"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        .required:after {
+            content: " *";
+            color: red;
+        }
+        .add-stakeholder {
+            background-color: #34A853;
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        .remove-stakeholder {
+            background-color: #EA4335;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .stakeholder {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            background-color: white;
+        }
+        .submit-btn {
+            background-color: #4285F4;
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .info-tip {
+            font-size: 14px;
+            color: #666;
+            margin-top: -10px;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>GCP Project Intake Form</h1>
+    <p>This form collects essential information for new Google Cloud Platform project requests. Please provide accurate details to help us set up your project correctly.</p>
+    
+    <form id="gcpIntakeForm">
+        <div class="section">
+            <h2>Project Basics</h2>
+            <label for="projectName" class="required">Project Name</label>
+            <input type="text" id="projectName" name="projectName" required>
+            
+            <label for="projectDescription" class="required">Project Description</label>
+            <textarea id="projectDescription" name="projectDescription" required placeholder="Brief description of what this project is for..."></textarea>
+        </div>
+        
+        <div class="section">
+            <h2>Project Ownership</h2>
+            <label for="projectOwner" class="required">Project Owner</label>
+            <input type="text" id="projectOwner" name="projectOwner" required placeholder="Full name">
+            <p class="info-tip">This person will be the single point of contact responsible for this GCP project</p>
+            
+            <label for="ownerEmail" class="required">Owner Email</label>
+            <input type="email" id="ownerEmail" name="ownerEmail" required>
+        </div>
+        
+        <div class="section">
+            <h2>Billing Information</h2>
+            <label for="billingAccount" class="required">What billing account will be used?</label>
+            <input type="text" id="billingAccount" name="billingAccount" required placeholder="Enter GCP billing account name or ID">
+            
+            <label for="billingNotes">Billing Notes</label>
+            <textarea id="billingNotes" name="billingNotes" placeholder="Any additional information about billing..."></textarea>
+            
+            <label for="budgetEstimate">Estimated Monthly Budget (USD)</label>
+            <input type="text" id="budgetEstimate" name="budgetEstimate" placeholder="e.g. $500">
+        </div>
+        
+        <div class="section">
+            <h2>Project Stakeholders</h2>
+            <p>Please add any relevant stakeholders who need to be involved or informed about this project.</p>
+            
+            <div id="stakeholdersContainer">
+                <div class="stakeholder">
+                    <label for="stakeholderName1">Stakeholder Name</label>
+                    <input type="text" id="stakeholderName1" name="stakeholderName1">
+                    
+                    <label for="stakeholderEmail1">Stakeholder Email</label>
+                    <input type="email" id="stakeholderEmail1" name="stakeholderEmail1">
+                    
+                    <label for="stakeholderRole1">Role in Project</label>
+                    <input type="text" id="stakeholderRole1" name="stakeholderRole1" placeholder="e.g. Developer, Product Manager, etc.">
+                    
+                    <button type="button" class="remove-stakeholder">Remove</button>
+                </div>
+            </div>
+            
+            <button type="button" class="add-stakeholder" id="addStakeholderBtn">+ Add Another Stakeholder</button>
+        </div>
+        
+        <div class="section">
+            <h2>Project Purpose & Context</h2>
+            
+            <label for="projectMission" class="required">Project Mission/Purpose</label>
+            <textarea id="projectMission" name="projectMission" required placeholder="What is this project trying to accomplish?"></textarea>
+            
+            <label for="businessJustification" class="required">Business Justification</label>
+            <textarea id="businessJustification" name="businessJustification" required placeholder="Why is this GCP project needed?"></textarea>
+            
+            <label for="projectInputs">Project Inputs</label>
+            <textarea id="projectInputs" name="projectInputs" placeholder="What data, systems, or resources will this project use as inputs?"></textarea>
+            
+            <label for="projectOutputs">Project Outputs</label>
+            <textarea id="projectOutputs" name="projectOutputs" placeholder="What will this project produce or deliver?"></textarea>
+            
+            <label for="dependentSystems">Dependent Systems or Services</label>
+            <textarea id="dependentSystems" name="dependentSystems" placeholder="Are there any systems that will depend on this project?"></textarea>
+        </div>
+        
+        <div class="section">
+            <h2>Technical Requirements</h2>
+            
+            <label for="estimatedResources">Estimated Resources Needed</label>
+            <textarea id="estimatedResources" name="estimatedResources" placeholder="E.g., compute instances, storage requirements, databases, etc."></textarea>
+            
+            <label for="securityRequirements">Security Requirements or Considerations</label>
+            <textarea id="securityRequirements" name="securityRequirements" placeholder="Any specific security needs or compliance requirements"></textarea>
+            
+            <label for="timeline">Project Timeline</label>
+            <textarea id="timeline" name="timeline" placeholder="Expected start date, major milestones, and end date if applicable"></textarea>
+        </div>
+        
+        <button type="submit" class="submit-btn">Submit Project Request</button>
+    </form>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add stakeholder functionality
+            let stakeholderCount = 1;
+            
+            document.getElementById('addStakeholderBtn').addEventListener('click', function() {
+                stakeholderCount++;
+                const container = document.getElementById('stakeholdersContainer');
+                const newStakeholder = document.createElement('div');
+                newStakeholder.className = 'stakeholder';
+                
+                newStakeholder.innerHTML = `
+                    <label for="stakeholderName${stakeholderCount}">Stakeholder Name</label>
+                    <input type="text" id="stakeholderName${stakeholderCount}" name="stakeholderName${stakeholderCount}">
+                    
+                    <label for="stakeholderEmail${stakeholderCount}">Stakeholder Email</label>
+                    <input type="email" id="stakeholderEmail${stakeholderCount}" name="stakeholderEmail${stakeholderCount}">
+                    
+                    <label for="stakeholderRole${stakeholderCount}">Role in Project</label>
+                    <input type="text" id="stakeholderRole${stakeholderCount}" name="stakeholderRole${stakeholderCount}" placeholder="e.g. Developer, Product Manager, etc.">
+                    
+                    <button type="button" class="remove-stakeholder">Remove</button>
+                `;
+                
+                container.appendChild(newStakeholder);
+            });
+            
+            // Remove stakeholder functionality
+            document.getElementById('stakeholdersContainer').addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-stakeholder')) {
+                    const stakeholderDiv = e.target.parentElement;
+                    if (document.querySelectorAll('.stakeholder').length > 1) {
+                        stakeholderDiv.remove();
+                    }
+                }
+            });
+            
+            // Form submission
+            document.getElementById('gcpIntakeForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // In a real implementation, this would send the data to Tines
+                alert('Form submitted successfully! In a real implementation, this data would be sent to Tines for processing.');
+            });
+        });
+    </script>
+</body>
+</html>
